@@ -118,10 +118,10 @@ resource "aws_security_group" "vpn_sg" {
 }
 
 resource "aws_instance" "vpn" {
-  ami             = "ami-0123456789abcdef0"  # Replace with OpenVPN AMI or other
+  ami             = "${var.ami}"  # Replace with OpenVPN AMI or other
   instance_type   = "t3.micro"
   subnet_id       = aws_subnet.public.id
-  security_groups = [aws_security_group.vpn_sg.name]
+  security_groups = [aws_security_group.vpn_sg.id]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -195,4 +195,8 @@ resource "aws_instance" "vpn" {
 
 output "vpn_ip" {
   value = aws_instance.vpn.public_ip
+}
+
+output "vpn_instance_id" {
+  value = aws_instance.vpn.id
 }
